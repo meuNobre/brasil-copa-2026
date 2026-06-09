@@ -80,9 +80,15 @@
             Se este projeto foi útil para você, considere apoiar seu desenvolvimento.
             Sua contribuição ajuda a manter novos projetos, melhorias e meu próprio aprendizado.
         </p>
-        <a href="https://nubank.com.br/cobrar/1bc6ox/6a288c47-b235-4885-8639-e4ccdee91119" target="_blank" class="btn-support">
-            ☕ Apoiar Projeto
-        </a>
+
+        <p class="info-card-text">PIX: <strong>nobrecoding@gmail.com</strong></p>
+      <button class="btn-support" onclick="navigator.clipboard.writeText('nobrecoding@gmail.com'); showToast('PIX copiado!')">
+        Copiar PIX
+      </button>
+
+      <div id="toast" class="toast">Copiado!</div>
+    <div>
+    </div>
     </div>
 
     <div class="info-card">
@@ -131,6 +137,17 @@
 
   loadJogos();
 </script>
+
+<script>
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1500);
+}</script>
 
 </body>
 </html>

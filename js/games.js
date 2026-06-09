@@ -10,6 +10,10 @@ export async function loadJogos() {
     try {
         const data = await fetchData('/jogos');
 
+        if (!data || !Array.isArray(data.matches)) {
+            throw new Error("Formato inválido da API");
+        }
+
         const games = data.matches.filter(match =>
             match.homeTeam?.id === BRASIL_TEAM_ID ||
             match.awayTeam?.id === BRASIL_TEAM_ID
