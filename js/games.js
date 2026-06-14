@@ -41,10 +41,10 @@ export async function loadJogos() {
 
         if (upcoming.length > 0) {
             const next = upcoming[0];
-            const opponent = next.homeTeam.id === BRASIL_TEAM_ID 
-                ? next.awayTeam.name 
+            const opponent = next.homeTeam.id === BRASIL_TEAM_ID
+                ? next.awayTeam.name
                 : next.homeTeam.name;
-            
+
             html += `
                 <div class="next-game-highlight">
                     <div class="next-label">⚽ Próximo jogo</div>

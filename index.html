@@ -7,7 +7,7 @@
   <title>Brasil na Copa 2026</title>
 
   <meta property="og:title" content="Brasil na Copa 2026">
-  <meta property="og:description" content="Acompanhe jogos, tabela, elenco, estatísticas e tudo sobre a Seleção Brasileira na Copa do Mundo 2026.">
+  <meta property="og:description" content="Acompanhe jogos, tabela, bolão e ranking da Seleção Brasileira na Copa do Mundo 2026.">
   <meta property="og:image" content="https://brasil-copa-2026-five.vercel.app/preview.png">
   <meta property="og:url" content="https://brasil-copa-2026-five.vercel.app">
   <meta property="og:type" content="website">
@@ -18,9 +18,10 @@
 <body>
 
 <header>
+  <div id="auth-header-area" class="auth-header-area"></div>
   <span class="flag-emoji">🇧🇷</span>
   <h1>Brasil na Copa 2026</h1>
-  <p>Acompanhe todos os jogos da Seleção</p>
+  <p>Acompanhe todos os jogos da Seleção e jogue o bolão</p>
   <div class="live-badge">
     <span class="live-dot"></span>
     Dados atualizados automaticamente
@@ -28,9 +29,11 @@
 </header>
 
 <nav>
-  <button class="tab active" data-tab="jogos">Jogos</button>
-  <button class="tab" data-tab="grupo">Grupo</button>
-  <button class="tab" data-tab="info">Sobre</button>
+  <button class="tab active" data-tab="jogos" onclick="showTab('jogos', event)">Jogos</button>
+  <button class="tab" data-tab="grupo" onclick="showTab('grupo', event)">Grupo</button>
+  <button class="tab" data-tab="bolao" onclick="showTab('bolao', event)">Bolão</button>
+  <button class="tab" data-tab="ranking" onclick="showTab('ranking', event)">Ranking</button>
+  <button class="tab" data-tab="info" onclick="showTab('info', event)">Sobre</button>
 </nav>
 
 <main>
@@ -53,6 +56,27 @@
     </div>
   </section>
 
+  <section id="tab-bolao" class="section">
+    <div class="status-bar">
+        <span class="section-title">⚽ Bolão da Copa</span>
+    </div>
+    <div id="bolao-content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-ranking" class="section">
+    <div id="ranking-content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Carregando ranking...</p>
+      </div>
+    </div>
+  </section>
+
   <section id="tab-info" class="section">
     <div class="status-bar">
         <span class="section-title">Sobre o Projeto</span>
@@ -63,8 +87,8 @@
         <p class="info-card-text">
             Olá! Sou João Miguel, desenvolvedor independente.
             Este projeto foi criado para acompanhar a campanha da Seleção Brasileira
-            na Copa do Mundo de 2026. Os dados são fornecidos pela Football-Data.org
-            e processados por uma API própria.
+            na Copa do Mundo de 2026, com bolão e ranking entre torcedores.
+            Os dados são fornecidos pela Football-Data.org e processados por uma API própria.
         </p>
         <div class="social-links">
           <a href="https://github.com/meuNobre" target="_blank" class="btn-social github">
@@ -103,7 +127,10 @@
         <span class="info-card-title">Dados</span>
         <p class="info-card-links">
             GET /api/jogos → jogos do Brasil<br>
-            GET /api/grupo → classificação
+            GET /api/grupo → classificação<br>
+            GET /api/bolao/jogos → jogos do bolão<br>
+            GET/POST /api/bolao/palpites → seus palpites<br>
+            GET /api/bolao/ranking → ranking geral
         </p>
     </div>
 
@@ -115,36 +142,44 @@
 </main>
 
 <footer>
-  Dados: <a href="https://www.football-data.org" target="_blank">football-data.org</a> · 
+  Dados: <a href="https://www.football-data.org" target="_blank">football-data.org</a> ·
   Copa do Mundo 2026 🏆
 </footer>
 
-<script type="module">
-  import { loadJogos } from './js/games.js';
-  import { loadGrupo } from './js/standings.js';
+<!-- MODAL DE LOGIN / REGISTRO -->
+<div id="auth-modal" class="modal-overlay">
+  <div class="modal-box">
+    <button id="auth-modal-close" class="modal-close" aria-label="Fechar">×</button>
 
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const tabName = tab.dataset.tab;
+    <div class="auth-tabs">
+      <button type="button" id="auth-tab-login" class="auth-tab active">Entrar</button>
+      <button type="button" id="auth-tab-register" class="auth-tab">Criar conta</button>
+    </div>
 
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    <form id="auth-form" class="auth-form">
+      <div id="auth-username-field" class="form-field" style="display:none">
+        <label for="auth-username">Nome de usuário</label>
+        <input type="text" id="auth-username" name="username" minlength="3" maxlength="20" placeholder="seu_nome">
+      </div>
 
-      document.getElementById(`tab-${tabName}`).classList.add('active');
-      tab.classList.add('active');
+      <div class="form-field">
+        <label for="auth-email">Email</label>
+        <input type="email" id="auth-email" name="email" required placeholder="voce@email.com">
+      </div>
 
-      if (tabName === 'grupo') loadGrupo();
-    });
-  });
+      <div class="form-field">
+        <label for="auth-password">Senha</label>
+        <input type="password" id="auth-password" name="password" required minlength="6" placeholder="mínimo 6 caracteres">
+      </div>
 
-  setInterval(() => {
-    const activeTab = document.querySelector('.section.active');
-    if (activeTab?.id === 'tab-jogos') loadJogos();
-    if (activeTab?.id === 'tab-grupo') loadGrupo();
-  }, 60000);
+      <div id="auth-error" class="auth-error"></div>
 
-  loadJogos();
-</script>
+      <button type="submit" id="auth-submit" class="btn-support" style="width:100%">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
 
 <script>
 function showToast(message) {
@@ -155,7 +190,8 @@ function showToast(message) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, 1500);
-}</script>
+}
+</script>
 
 </body>
 </html>

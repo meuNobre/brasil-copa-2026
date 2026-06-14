@@ -1,6 +1,6 @@
-const BRASIL_TEAM_ID = 764;  // ID do Brasil
+const BRASIL_TEAM_ID = 764; // ID do Brasil (Football-Data v4 "competitions/WC/matches")
 const BASE_URL = 'https://brasil-copa-2026-api.vercel.app/api';
-  
+
 export async function fetchData(endpoint) {
     const response = await fetch(`${BASE_URL}${endpoint}`);
 
@@ -11,4 +11,4 @@ export async function fetchData(endpoint) {
     return response.json();
 }
 
-export { BRASIL_TEAM_ID };
+export { BRASIL_TEAM_ID, BASE_URL };

@@ -9,7 +9,7 @@ export async function loadGrupo() {
 
     try {
         const data = await fetchData('/grupo');
-        
+
         const brasilGroup = data.standings.find(standing =>
             standing.table.some(row => row.team.id === BRASIL_TEAM_ID)
         );
