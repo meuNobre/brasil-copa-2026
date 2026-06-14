@@ -94,6 +94,40 @@ header p {
     }
 }
 
+/* AUTH HEADER AREA */
+.auth-header-area {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 5;
+}
+
+.auth-header-area .tab {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.78rem;
+}
+
+.auth-header-area .tab:hover {
+    border-color: var(--amarelo);
+    color: var(--amarelo);
+}
+
+.user-badge {
+    font-size: 0.78rem;
+    color: var(--amarelo);
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.35rem 0.85rem;
+}
+
 /* NAV TABS */
 nav {
     display: flex;
@@ -473,6 +507,83 @@ main {
     color: #fff;
 }
 
+/* BOLÃO - área de palpite */
+.palpite-area {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.palpite-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.palpite-input {
+    width: 56px;
+    text-align: center;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.4rem;
+    -moz-appearance: textfield;
+}
+
+.palpite-input:focus {
+    outline: none;
+    border-color: var(--verde);
+}
+
+.palpite-x {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.palpite-submit {
+    margin-left: 0.5rem;
+}
+
+.palpite-resultado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.palpite-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.palpite-placar {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--amarelo);
+}
+
+.palpite-feedback {
+    text-align: center;
+    font-size: 0.78rem;
+    margin-top: 0.5rem;
+    min-height: 1em;
+}
+
+.palpite-feedback.sucesso {
+    color: #4ade80;
+}
+
+.palpite-feedback.erro {
+    color: #f87171;
+}
+
 /* API INFO */
 .api-note {
     background: var(--card);
@@ -602,6 +713,9 @@ footer a {
     font-weight: 600;
     transition: all 0.2s;
     margin-top: 1rem;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .btn-support:hover {
@@ -609,23 +723,10 @@ footer a {
     transform: translateY(-1px);
 }
 
-/* API Note */
-.api-note {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 1rem;
-}
-
-.api-note p {
-    font-size: 0.8rem;
-    color: var(--muted);
-    line-height: 1.6;
-}
-
-.api-note strong {
-    color: var(--text);
+.btn-support:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 /* ====================================================
@@ -699,6 +800,114 @@ footer a {
   transform: translateX(-50%) translateY(-5px);
 }
 
+/* ====================================================
+   MODAL DE AUTENTICAÇÃO
+   ==================================================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 100;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem 1.5rem;
+    width: 100%;
+    max-width: 360px;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: var(--text);
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.auth-tab.active {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: #fff;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-field label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.form-field input {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--verde);
+}
+
+.auth-error {
+    color: #f87171;
+    font-size: 0.78rem;
+    min-height: 1em;
+    text-align: center;
+}
+
 /* RESPONSIVO */
 @media (max-width: 480px) {
     .stats-grid {
@@ -711,5 +920,15 @@ footer a {
 
     .team-flag {
         font-size: 1.5rem;
+    }
+
+    .auth-header-area {
+        position: static;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+    }
+
+    header {
+        padding-top: 1rem;
     }
 }
