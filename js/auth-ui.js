@@ -1,41 +1,58 @@
 import { login, register, logout, isLoggedIn, getUser, googleLogin } from './auth.js';
 
+
 const GOOGLE_CLIENT_ID = '775293905598-g38j9qse8i52jlj1ars65jel497t4i82.apps.googleusercontent.com';
 
 export function initAuthUI() {
-    const modal        = document.getElementById('auth-modal');
-    const closeBtn     = document.getElementById('auth-modal-close');
-    const form         = document.getElementById('auth-form');
-    const tabLogin     = document.getElementById('auth-tab-login');
-    const tabRegister  = document.getElementById('auth-tab-register');
-    const usernameField = document.getElementById('auth-username-field');
-    const errorBox     = document.getElementById('auth-error');
-    const submitBtn    = document.getElementById('auth-submit');
-    const googleBtn    = document.getElementById('auth-google-btn');
+    const modal          = document.getElementById('auth-modal');
+    const closeBtn       = document.getElementById('auth-modal-close');
+    const form           = document.getElementById('auth-form');
+    const tabLogin       = document.getElementById('auth-tab-login');
+    const tabRegister    = document.getElementById('auth-tab-register');
+    const usernameField  = document.getElementById('auth-username-field');
+    const errorBox       = document.getElementById('auth-error');
+    const submitBtn      = document.getElementById('auth-submit');
 
     // Painel de escolha de username (novo usuário Google)
-    const usernamePanel = document.getElementById('auth-google-username-panel');
-    const usernameInput = document.getElementById('auth-google-username-input');
+    const usernamePanel      = document.getElementById('auth-google-username-panel');
+    const usernameInput      = document.getElementById('auth-google-username-input');
     const usernameConfirmBtn = document.getElementById('auth-google-username-confirm');
-    const usernameError = document.getElementById('auth-google-username-error');
+    const usernameError      = document.getElementById('auth-google-username-error');
 
     let mode = 'login';
-    let pendingGoogleCredential = null; // guarda o credential enquanto pede username
+    let pendingGoogleCredential = null;
 
-    // ── Inicializar Google Identity Services ──────────────────────────────────
     function initGoogleSignIn() {
         if (!window.google) return;
+
         google.accounts.id.initialize({
             client_id: GOOGLE_CLIENT_ID,
-            callback: handleGoogleCallback
+            callback: handleGoogleCallback,
+            // Desativa o One Tap automático (menos intrusivo)
+            auto_select: false,
+            cancel_on_tap_outside: true,
         });
+
+        // Renderiza o botão oficial dentro do container
+        const container = document.getElementById('auth-google-btn-container');
+        if (container) {
+            google.accounts.id.renderButton(container, {
+                type: 'standard',
+                shape: 'rectangular',
+                theme: 'outline',
+                text: 'signin_with',
+                size: 'large',
+                locale: 'pt-BR',
+                width: container.offsetWidth || 300,
+            });
+        }
     }
 
     async function handleGoogleCallback(response) {
+        errorBox.textContent = '';
         try {
             const result = await googleLogin(response.credential);
             if (result.needsUsername) {
-                // Guarda o credential e mostra tela de username
                 pendingGoogleCredential = result.credential;
                 showUsernamePanel(result.suggestion);
             } else {
@@ -50,8 +67,8 @@ export function initAuthUI() {
     function showUsernamePanel(suggestion = '') {
         form.style.display = 'none';
         document.querySelector('.auth-tabs').style.display = 'none';
-        const googleBtnWrapper = document.getElementById('auth-google-wrapper');
-        if (googleBtnWrapper) googleBtnWrapper.style.display = 'none';
+        const googleWrapper = document.getElementById('auth-google-wrapper');
+        if (googleWrapper) googleWrapper.style.display = 'none';
 
         usernamePanel.style.display = 'block';
         usernameInput.value = suggestion;
@@ -63,8 +80,8 @@ export function initAuthUI() {
         usernamePanel.style.display = 'none';
         form.style.display = 'block';
         document.querySelector('.auth-tabs').style.display = 'flex';
-        const googleBtnWrapper = document.getElementById('auth-google-wrapper');
-        if (googleBtnWrapper) googleBtnWrapper.style.display = 'block';
+        const googleWrapper = document.getElementById('auth-google-wrapper');
+        if (googleWrapper) googleWrapper.style.display = 'block';
     }
 
     usernameConfirmBtn?.addEventListener('click', async () => {
@@ -72,7 +89,6 @@ export function initAuthUI() {
         usernameError.textContent = '';
         usernameConfirmBtn.disabled = true;
         usernameConfirmBtn.textContent = 'Aguarde...';
-
         try {
             await googleLogin(pendingGoogleCredential, username);
             pendingGoogleCredential = null;
@@ -84,15 +100,6 @@ export function initAuthUI() {
             usernameConfirmBtn.disabled = false;
             usernameConfirmBtn.textContent = 'Confirmar';
         }
-    });
-
-    // ── Botão "Entrar com Google" manual ─────────────────────────────────────
-    googleBtn?.addEventListener('click', () => {
-        if (!window.google) {
-            errorBox.textContent = 'Google Sign-In não carregou. Tente recarregar a página.';
-            return;
-        }
-        google.accounts.id.prompt(); // abre o One Tap / popup
     });
 
     // ── Modal / abas / form email+senha ───────────────────────────────────────
@@ -143,16 +150,20 @@ export function initAuthUI() {
     });
 
     setMode('login');
-
-    // ── Header ────────────────────────────────────────────────────────────────
     document.addEventListener('auth-changed', updateAuthHeader);
     updateAuthHeader();
 
-    // Inicializa Google depois que o script GSI estiver pronto
-    if (window.google) {
+    // Inicializa Google quando o script GSI estiver carregado
+    if (window.google?.accounts) {
         initGoogleSignIn();
     } else {
-        window.addEventListener('load', initGoogleSignIn);
+        // O script GSI é async; espera ele terminar de carregar
+        const interval = setInterval(() => {
+            if (window.google?.accounts) {
+                clearInterval(interval);
+                initGoogleSignIn();
+            }
+        }, 100);
     }
 }
 

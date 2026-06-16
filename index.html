@@ -153,13 +153,13 @@
 <div id="auth-modal" class="modal-overlay">
   <div class="modal-box">
     <button id="auth-modal-close" class="modal-close" aria-label="Fechar">×</button>
-
+ 
     <div class="auth-tabs">
       <button type="button" id="auth-tab-login"    class="auth-tab active">Entrar</button>
       <button type="button" id="auth-tab-register" class="auth-tab">Criar conta</button>
     </div>
-
-    <!-- Formulário email + senha (igual ao original) -->
+ 
+    <!-- Formulário email + senha -->
     <form id="auth-form" class="auth-form">
       <div id="auth-username-field" class="form-field" style="display:none">
         <label for="auth-username">Nome de usuário</label>
@@ -176,19 +176,19 @@
       <div id="auth-error" class="auth-error"></div>
       <button type="submit" id="auth-submit" class="btn-support" style="width:100%">Entrar</button>
     </form>
-
-    <!-- Separador + botão Google -->
+ 
+    <!-- Separador + botão Google (renderizado pelo GSI) -->
     <div id="auth-google-wrapper" class="auth-divider-wrapper">
       <div class="auth-divider"><span>ou</span></div>
-      <button id="auth-google-btn" class="btn-google" type="button">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20" height="20">
-        Entrar com Google
-      </button>
+      <!-- O Google injeta o botão aqui automaticamente via renderButton() -->
+      <div id="auth-google-btn-container" style="display:flex; justify-content:center;"></div>
     </div>
-
-    <!-- Painel de escolha de username (aparece só para novos usuários Google) -->
+ 
+    <!-- Painel de username para novos usuários Google -->
     <div id="auth-google-username-panel" style="display:none" class="auth-form">
-      <p class="auth-google-username-title">Escolha um nome de usuário para sua conta</p>
+      <p style="font-size:.95rem;margin-bottom:12px;color:#555;">
+        Escolha um nome de usuário para sua conta
+      </p>
       <div class="form-field">
         <label for="auth-google-username-input">Nome de usuário</label>
         <input type="text" id="auth-google-username-input" minlength="3" maxlength="20" placeholder="seu_nome">
@@ -196,7 +196,7 @@
       <div id="auth-google-username-error" class="auth-error"></div>
       <button id="auth-google-username-confirm" class="btn-support" type="button" style="width:100%">Confirmar</button>
     </div>
-
+ 
   </div>
 </div>
 
