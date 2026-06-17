@@ -12,30 +12,38 @@
   <meta property="og:url" content="https://brasil-copa-2026-five.vercel.app">
   <meta property="og:type" content="website">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="icons/brasil.ico" type="image/png">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-
 </head>
 <body>
 
 <header>
   <div id="auth-header-area" class="auth-header-area"></div>
-  <span class="flag-emoji">🇧🇷</span>
-  <h1>Brasil na Copa 2026</h1>
-  <p>Acompanhe todos os jogos da Seleção e jogue o bolão</p>
+
+  <div class="header-inner">
+    <div class="header-flag">🇧🇷</div>
+    <div class="header-text">
+      <h1>Brasil na Copa 2026</h1>
+      <p>Jogos, classificação e bolão da Seleção</p>
+    </div>
+  </div>
+
   <div class="live-badge">
     <span class="live-dot"></span>
-    Dados atualizados automaticamente
+    Atualizado automaticamente
   </div>
 </header>
 
 <nav>
-  <button class="tab active" data-tab="jogos" onclick="showTab('jogos', event)">Jogos</button>
-  <button class="tab" data-tab="grupo" onclick="showTab('grupo', event)">Grupo</button>
-  <button class="tab" data-tab="bolao" onclick="showTab('bolao', event)">Bolão</button>
-  <button class="tab" data-tab="ranking" onclick="showTab('ranking', event)">Ranking</button>
-  <button class="tab" data-tab="info" onclick="showTab('info', event)">Sobre</button>
+  <button class="tab active" data-tab="jogos" onclick="showTab('jogos', event)">⚽ Jogos</button>
+  <button class="tab" data-tab="grupo" onclick="showTab('grupo', event)">📊 Grupo</button>
+  <button class="tab" data-tab="bolao" onclick="showTab('bolao', event)">🎯 Bolão</button>
+  <button class="tab" data-tab="ranking" onclick="showTab('ranking', event)">🏆 Ranking</button>
+  <button class="tab" data-tab="info" onclick="showTab('info', event)">ℹ️ Sobre</button>
 </nav>
 
 <main>
@@ -60,7 +68,7 @@
 
   <section id="tab-bolao" class="section">
     <div class="status-bar">
-        <span class="section-title">⚽ Bolão da Copa</span>
+      <span class="section-title">⚽ Bolão da Copa</span>
     </div>
     <div id="bolao-content">
       <div class="loading">
@@ -81,85 +89,86 @@
 
   <section id="tab-info" class="section">
     <div class="status-bar">
-        <span class="section-title">Sobre o Projeto</span>
+      <span class="section-title">Sobre o Projeto</span>
     </div>
 
     <div class="info-card">
-        <span class="info-card-title">Desenvolvido por</span>
-        <p class="info-card-text">
-            Olá! Sou João Miguel, desenvolvedor independente.
-            Este projeto foi criado para acompanhar a campanha da Seleção Brasileira
-            na Copa do Mundo de 2026, com bolão e ranking entre torcedores.
-            Os dados são fornecidos pela Football-Data.org e processados por uma API própria.
-        </p>
-        <div class="social-links">
-          <a href="https://github.com/meuNobre" target="_blank" class="btn-social github">
-              <span><img src="icons/github.png" alt="GitHub"></span> GitHub
-          </a>
-          <a href="https://linkedin.com/in/joao-miguel-nobre" target="_blank" class="btn-social linkedin">
-              <span><img src="icons/linkedin.png" alt="LinkedIn"></span> LinkedIn
-          </a>
-          <a href="https://portfolio-nobre-five.vercel.app" target="_blank" class="btn-social portfolio">
-              <span>🌐</span> Portfólio
-          </a>
-          <a href="https://instagram.com/nobre_dos_codigos" target="_blank" class="btn-social instagram">
-              <span><img src="icons/instagram.png" alt="Instagram"></span> Instagram
-          </a>
+      <span class="info-card-title">Desenvolvido por</span>
+      <p class="info-card-text">
+        Olá! Sou João Miguel, desenvolvedor independente.
+        Este projeto foi criado para acompanhar a campanha da Seleção Brasileira
+        na Copa do Mundo de 2026, com bolão e ranking entre torcedores.
+        Os dados são fornecidos pela Football-Data.org e processados por uma API própria.
+      </p>
+      <div class="social-links">
+        <a href="https://github.com/meuNobre" target="_blank" class="btn-social github">
+          <span><img src="icons/github.png" alt="GitHub"></span> GitHub
+        </a>
+        <a href="https://linkedin.com/in/joao-miguel-nobre" target="_blank" class="btn-social linkedin">
+          <span><img src="icons/linkedin.png" alt="LinkedIn"></span> LinkedIn
+        </a>
+        <a href="https://portfolio-nobre-five.vercel.app" target="_blank" class="btn-social portfolio">
+          <span>🌐</span> Portfólio
+        </a>
+        <a href="https://instagram.com/nobre_dos_codigos" target="_blank" class="btn-social instagram">
+          <span><img src="icons/instagram.png" alt="Instagram"></span> Instagram
+        </a>
       </div>
     </div>
 
     <div class="info-card">
-        <span class="info-card-title">Apoie</span>
-        <p class="info-card-text">
-            Se este projeto foi útil para você, considere apoiar seu desenvolvimento.
-            Sua contribuição ajuda a manter novos projetos, melhorias e meu próprio aprendizado.
-        </p>
-
-        <p class="info-card-text">PIX: <strong>nobrecoding@gmail.com</strong></p>
+      <span class="info-card-title">Apoie</span>
+      <p class="info-card-text">
+        Se este projeto foi útil pra você, considere apoiar o desenvolvimento.
+        Sua contribuição ajuda a manter novos projetos, melhorias e meu próprio aprendizado.
+      </p>
+      <p class="info-card-text pix-key">PIX: <strong>nobrecoding@gmail.com</strong></p>
       <button class="btn-support" onclick="navigator.clipboard.writeText('nobrecoding@gmail.com'); showToast('PIX copiado!')">
-        Copiar PIX
+        📋 Copiar PIX
       </button>
-
       <div id="toast" class="toast">Copiado!</div>
-    <div>
-    </div>
     </div>
 
     <div class="info-card">
-        <span class="info-card-title">Dados</span>
-        <p class="info-card-links">
-            GET /api/jogos → jogos do Brasil<br>
-            GET /api/grupo → classificação<br>
-            GET /api/bolao/jogos → jogos do bolão<br>
-            GET/POST /api/bolao/palpites → seus palpites<br>
-            GET /api/bolao/ranking → ranking geral
-        </p>
+      <span class="info-card-title">Endpoints da API</span>
+      <div class="api-endpoints">
+        <div class="endpoint"><span class="method get">GET</span><code>/api/jogos</code></div>
+        <div class="endpoint"><span class="method get">GET</span><code>/api/grupo</code></div>
+        <div class="endpoint"><span class="method get">GET</span><code>/api/bolao/jogos</code></div>
+        <div class="endpoint"><span class="method post">POST</span><code>/api/bolao/palpites</code></div>
+        <div class="endpoint"><span class="method get">GET</span><code>/api/bolao/ranking</code></div>
+      </div>
     </div>
 
     <div class="api-note">
-        <p><strong>API:</strong> https://brasil-copa-2026-api.vercel.app/api</p>
+      <p><strong>API:</strong> https://brasil-copa-2026-api.vercel.app/api</p>
     </div>
-</section>
+  </section>
 
 </main>
 
 <footer>
-  Dados: <a href="https://www.football-data.org" target="_blank">football-data.org</a> ·
+  Dados: <a href="https://www.football-data.org" target="_blank">football-data.org</a>
+  <span class="footer-sep">·</span>
   Copa do Mundo 2026 🏆
+  <span class="footer-sep">·</span>
+  Feito com ❤️ por <a href="https://portfolio-nobre-five.vercel.app" target="_blank">João Miguel</a>
 </footer>
-
-<!-- MODAL DE LOGIN / REGISTRO -->
 
 <div id="auth-modal" class="modal-overlay">
   <div class="modal-box">
     <button id="auth-modal-close" class="modal-close" aria-label="Fechar">×</button>
- 
+
+    <div class="modal-header">
+      <span class="modal-flag">🇧🇷</span>
+      <span class="modal-title-text">Entrar no Bolão</span>
+    </div>
+
     <div class="auth-tabs">
-      <button type="button" id="auth-tab-login"    class="auth-tab active">Entrar</button>
+      <button type="button" id="auth-tab-login" class="auth-tab active">Entrar</button>
       <button type="button" id="auth-tab-register" class="auth-tab">Criar conta</button>
     </div>
- 
-    <!-- Formulário email + senha -->
+
     <form id="auth-form" class="auth-form">
       <div id="auth-username-field" class="form-field" style="display:none">
         <label for="auth-username">Nome de usuário</label>
@@ -176,18 +185,15 @@
       <div id="auth-error" class="auth-error"></div>
       <button type="submit" id="auth-submit" class="btn-support" style="width:100%">Entrar</button>
     </form>
- 
-    <!-- Separador + botão Google (renderizado pelo GSI) -->
+
     <div id="auth-google-wrapper" class="auth-divider-wrapper">
       <div class="auth-divider"><span>ou</span></div>
-      <!-- O Google injeta o botão aqui automaticamente via renderButton() -->
       <div id="auth-google-btn-container" style="display:flex; justify-content:center;"></div>
     </div>
- 
-    <!-- Painel de username para novos usuários Google -->
+
     <div id="auth-google-username-panel" style="display:none" class="auth-form">
-      <p style="font-size:.95rem;margin-bottom:12px;color:#555;">
-        Escolha um nome de usuário para sua conta
+      <p style="font-size:.9rem;margin-bottom:12px;color:var(--muted);">
+        Escolha um nome de usuário pra sua conta
       </p>
       <div class="form-field">
         <label for="auth-google-username-input">Nome de usuário</label>
@@ -196,10 +202,8 @@
       <div id="auth-google-username-error" class="auth-error"></div>
       <button id="auth-google-username-confirm" class="btn-support" type="button" style="width:100%">Confirmar</button>
     </div>
- 
   </div>
 </div>
-
 
 <script type="module" src="js/main.js"></script>
 
@@ -208,10 +212,7 @@ function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
   toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 1500);
+  setTimeout(() => toast.classList.remove("show"), 1800);
 }
 </script>
 
