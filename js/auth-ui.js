@@ -176,7 +176,7 @@ function updateAuthHeader() {
     if (isLoggedIn()) {
         const user = getUser();
         headerArea.innerHTML = `
-            <span class="user-badge">👤 ${user.username}</span>
+            <span class="user-badge">${user.username}</span>
             <button class="tab" id="logout-btn">Sair</button>
         `;
         document.getElementById('logout-btn').addEventListener('click', () => {

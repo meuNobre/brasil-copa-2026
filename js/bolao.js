@@ -128,8 +128,8 @@ function renderJogoBolao(jogo) {
     if (finalizado && palpite && palpite.pontos !== null && palpite.pontos !== undefined) {
         const cls = palpite.pontos === 10 ? 'win' : (palpite.pontos === 5 ? 'draw' : 'loss');
         const texto = palpite.pontos === 10
-            ? '🎯 Placar exato (+10)'
-            : (palpite.pontos === 5 ? '✅ Resultado certo (+5)' : '❌ Sem pontos');
+            ? 'Placar exato (+10)'
+            : (palpite.pontos === 5 ? 'Resultado certo (+5)' : 'Sem pontos');
         pontosTag = `<span class="score-status ${cls}">${texto}</span>`;
     }
 

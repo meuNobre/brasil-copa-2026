@@ -47,7 +47,7 @@ export async function loadJogos() {
 
             html += `
                 <div class="next-game-highlight">
-                    <div class="next-label">⚽ Próximo jogo</div>
+                    <div class="next-label">Próximo jogo</div>
                     <div class="next-match">Brasil × ${opponent}</div>
                     <div class="next-datetime">${next.utcDate}</div>
                     ${renderCountdown(next.utcDate)}
@@ -57,7 +57,7 @@ export async function loadJogos() {
 
         if (live.length > 0) {
             html += `<div class="status-bar">
-                <span class="section-title">🔴 Ao vivo agora</span>
+                <span class="section-title">Ao vivo agora</span>
             </div>`;
             live.forEach(game => html += renderGame(game));
         }

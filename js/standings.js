@@ -70,7 +70,7 @@ export async function loadGrupo() {
                 </table>
             </div>
             <p style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem">
-                🟢 Posição verde = classificado para o mata-mata
+                Posição verde = classificado para o mata-mata
             </p>
         `;
 

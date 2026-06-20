@@ -3,7 +3,7 @@ export function getFlag(teamName) {
         'Brazil': '🇧🇷',
         'Morocco': '🇲🇦',
         'Haiti': '🇭🇹',
-        'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+        'Scotland': 'ESC',
         'Croatia': '🇭🇷',
         'Cameroon': '🇨🇲',
         'Serbia': '🇷🇸',
@@ -12,17 +12,17 @@ export function getFlag(teamName) {
         'Germany': '🇩🇪',
         'Portugal': '🇵🇹',
         'Spain': '🇪🇸',
-        'England': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+        'England': 'ENG',
         'Netherlands': '🇳🇱',
         'Japan': '🇯🇵',
         'South Korea': '🇰🇷',
         'United States': '🇺🇸',
         'Canada': '🇨🇦',
         'Mexico': '🇲🇽',
-        'TBD': '❓'
+        'TBD': '?'
     };
 
-    return flags[teamName] || '⚽';
+    return flags[teamName] || '-';
 }
 
 export function translateTeamName(name) {
@@ -68,7 +68,7 @@ export function getStatusLabel(game) {
     const { status, score } = game;
 
     if (status === 'IN_PLAY' || status === 'PAUSED') {
-        return { text: '🔴 Ao vivo', cls: 'live' };
+        return { text: 'AO VIVO', cls: 'live' };
     }
 
     if (status === 'FINISHED') {
@@ -77,12 +77,12 @@ export function getStatusLabel(game) {
         const opponentScore = isBrasilHome ? score.fullTime.away : score.fullTime.home;
 
         if (brasilScore > opponentScore) {
-            return { text: '✅ Vitória', cls: 'win' };
+            return { text: 'Vitória', cls: 'win' };
         }
         if (brasilScore < opponentScore) {
-            return { text: '❌ Derrota', cls: 'loss' };
+            return { text: 'Derrota', cls: 'loss' };
         }
-        return { text: '🟡 Empate', cls: 'draw' };
+        return { text: 'Empate', cls: 'draw' };
     }
 
     if (status === 'SCHEDULED' || status === 'TIMED') {

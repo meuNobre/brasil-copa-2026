@@ -398,7 +398,7 @@ main {
 }
 
 .next-game-highlight::before {
-  content: '⚽';
+  content: '-';
   position: absolute;
   right: -0.5rem;
   bottom: -1rem;

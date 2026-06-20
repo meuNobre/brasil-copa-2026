@@ -30,7 +30,7 @@ export async function loadRanking() {
 
         let html = `
             <div class="status-bar">
-                <span class="section-title">🏆 Ranking do Bolão</span>
+                <span class="section-title">Ranking do Bolão</span>
                 <button class="refresh-btn" onclick="window.loadRanking()">↻ Atualizar</button>
             </div>
             <div class="game-card" style="padding:0;overflow:hidden">
@@ -40,8 +40,8 @@ export async function loadRanking() {
                             <th>#</th>
                             <th style="text-align:left">Jogador</th>
                             <th>Jogos</th>
-                            <th>🎯</th>
-                            <th>✅</th>
+                            <th>Placar</th>
+                            <th>Result.</th>
                             <th>PTS</th>
                         </tr>
                     </thead>
@@ -50,7 +50,7 @@ export async function loadRanking() {
 
         data.ranking.forEach(r => {
             const isMe = r.username === meuUsername;
-            const medalha = r.posicao === 1 ? '🥇' : (r.posicao === 2 ? '🥈' : (r.posicao === 3 ? '🥉' : r.posicao));
+            const medalha = r.posicao === 1 ? '1º' : (r.posicao === 2 ? '2º' : (r.posicao === 3 ? '3º' : r.posicao + 'º'));
 
             html += `
                 <tr class="${isMe ? 'brasil-row' : ''}">
@@ -71,7 +71,7 @@ export async function loadRanking() {
                 </table>
             </div>
             <p style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem">
-                🎯 Placares exatos · ✅ Resultados certos · Pontos: 10 por placar exato, 5 por resultado certo
+                Placares exatos · Resultados certos · Pontos: 10 por placar exato, 5 por resultado certo
             </p>
         `;
 
