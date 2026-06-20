@@ -33,8 +33,9 @@ export async function loadRanking() {
                 <span class="section-title">Ranking do Bolão</span>
                 <button class="refresh-btn" onclick="window.loadRanking()">↻ Atualizar</button>
             </div>
-            <div class="game-card" style="padding:0;overflow:hidden">
-                <table class="group-table">
+            <div class="game-card" style="padding:0">
+              <div class="table-scroll">
+                <table class="group-table ranking-table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -69,6 +70,7 @@ export async function loadRanking() {
         html += `
                     </tbody>
                 </table>
+              </div>
             </div>
             <p style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem">
                 Placares exatos · Resultados certos · Pontos: 10 por placar exato, 5 por resultado certo

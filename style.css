@@ -501,6 +501,16 @@ main {
 /* ====================================================
    GROUP TABLE
    ==================================================== */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ranking-table {
+  min-width: 480px;
+}
+
 .group-table {
   width: 100%;
   border-collapse: collapse;
@@ -551,6 +561,11 @@ main {
 .group-table td:first-child {
   text-align: left;
   font-weight: 600;
+}
+
+.ranking-table th,
+.ranking-table td {
+  white-space: nowrap;
 }
 
 .pos-num {
