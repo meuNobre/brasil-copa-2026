@@ -1,5 +1,5 @@
 import { fetchData, BRASIL_TEAM_ID } from './api.js';
-import { renderGame, renderCountdown, renderStats } from './ui.js';
+import { renderGame, renderCountdown, renderStats, translateTeamName } from './ui.js';
 
 /**
  * Busca jogos do Brasil na Copa do Mundo
@@ -41,9 +41,9 @@ export async function loadJogos() {
 
         if (upcoming.length > 0) {
             const next = upcoming[0];
-            const opponent = next.homeTeam.id === BRASIL_TEAM_ID
+            const opponent = translateTeamName(next.homeTeam.id === BRASIL_TEAM_ID
                 ? next.awayTeam.name
-                : next.homeTeam.name;
+                : next.homeTeam.name);
 
             html += `
                 <div class="next-game-highlight">

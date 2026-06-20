@@ -94,8 +94,10 @@ export function getStatusLabel(game) {
 
 export function renderGame(game, isNext = false) {
     const isBrasilHome = game.homeTeam.id === 764;
-    const homeTeam = game.homeTeam.name;
-    const awayTeam = game.awayTeam.name;
+    const homeTeamRaw = game.homeTeam.name;
+    const awayTeamRaw = game.awayTeam.name;
+    const homeTeam = translateTeamName(homeTeamRaw);
+    const awayTeam = translateTeamName(awayTeamRaw);
     const homeScore = game.score.fullTime.home;
     const awayScore = game.score.fullTime.away;
     const status = getStatusLabel(game);
@@ -114,7 +116,7 @@ export function renderGame(game, isNext = false) {
             </div>
             <div class="game-teams">
                 <div class="team ${homeTeam === 'Brasil' ? 'brasil' : ''}">
-                    <span class="team-flag">${getFlag(homeTeam)}</span>
+                    <span class="team-flag">${getFlag(homeTeamRaw)}</span>
                     <span class="team-name">${homeTeam}</span>
                 </div>
                 <div class="score-box">
@@ -122,7 +124,7 @@ export function renderGame(game, isNext = false) {
                     <span class="score-status ${status.cls}">${status.text}</span>
                 </div>
                 <div class="team ${awayTeam === 'Brasil' ? 'brasil' : ''}">
-                    <span class="team-flag">${getFlag(awayTeam)}</span>
+                    <span class="team-flag">${getFlag(awayTeamRaw)}</span>
                     <span class="team-name">${awayTeam}</span>
                 </div>
             </div>
