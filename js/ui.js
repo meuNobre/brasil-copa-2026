@@ -64,6 +64,31 @@ export function formatDate(dateStr) {
     }) + ' (Brasília)';
 }
 
+const STAGE_LABELS = {
+    GROUP_STAGE: 'Fase de Grupos',
+    LAST_32: 'Dezesseis-avos de Final',
+    ROUND_OF_32: 'Dezesseis-avos de Final',
+    LAST_16: 'Oitavas de Final',
+    ROUND_OF_16: 'Oitavas de Final',
+    QUARTER_FINALS: 'Quartas de Final',
+    QUARTERFINALS: 'Quartas de Final',
+    SEMI_FINALS: 'Semifinal',
+    SEMIFINALS: 'Semifinal',
+    THIRD_PLACE: 'Disputa de 3º Lugar',
+    FINAL: 'Final',
+    OUTROS: 'Outros Jogos'
+};
+
+/**
+ * Traduz a fase do jogo (grupo ou mata-mata) pra um rótulo em português.
+ */
+export function stageLabel(stage, group) {
+    if (group) return `Grupo ${group.replace('GROUP_', '')}`;
+    if (stage && STAGE_LABELS[stage]) return STAGE_LABELS[stage];
+    if (stage) return stage.replace(/_/g, ' ');
+    return 'Copa 2026';
+}
+
 export function getStatusLabel(game) {
     const { status, score } = game;
 
@@ -111,7 +136,7 @@ export function renderGame(game, isNext = false) {
     return `
         <div class="game-card ${isLive ? 'live' : ''} ${isNext ? 'next' : ''}">
             <div class="game-meta">
-                <span class="game-phase">${game.group || 'Copa 2026'}</span>
+                <span class="game-phase">${stageLabel(game.stage, game.group)}</span>
                 <span class="game-date">${formatDate(game.utcDate)}</span>
             </div>
             <div class="game-teams">

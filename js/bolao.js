@@ -1,8 +1,19 @@
 import { authFetch } from './auth.js';
-import { getFlag, translateTeamName, formatDate } from './ui.js';
+import { getFlag, translateTeamName, formatDate, stageLabel } from './ui.js';
 import { isLoggedIn } from './auth.js';
 
 const BRASIL_TEAM_ID = 764; // ID da Football-Data usado pelo backend do bolão
+
+// ordem de exibição das fases do mata-mata (cobre variações de nomenclatura da API)
+const ORDEM_FASES = [
+    'GROUP_STAGE',
+    'LAST_32', 'ROUND_OF_32',
+    'LAST_16', 'ROUND_OF_16',
+    'QUARTER_FINALS', 'QUARTERFINALS',
+    'SEMI_FINALS', 'SEMIFINALS',
+    'THIRD_PLACE',
+    'FINAL'
+];
 
 /**
  * Carrega os jogos da fase de grupos do Brasil e renderiza o bolão.
@@ -34,7 +45,7 @@ export async function loadBolao() {
             container.innerHTML = `
                 <div class="info-card">
                     <p class="info-card-text">
-                        Ainda não há jogos da fase de grupos cadastrados.
+                        Ainda não há jogos cadastrados no bolão.
                         Volte em breve!
                     </p>
                 </div>
@@ -45,13 +56,39 @@ export async function loadBolao() {
         let totalPontos = 0;
         let jogosAvaliados = 0;
 
-        const html = data.jogos.map(jogo => {
+        data.jogos.forEach(jogo => {
             if (jogo.status === 'FINISHED' && jogo.meuPalpite?.pontos !== null && jogo.meuPalpite?.pontos !== undefined) {
                 totalPontos += jogo.meuPalpite.pontos;
                 jogosAvaliados++;
             }
-            return renderJogoBolao(jogo);
-        }).join('');
+        });
+
+        const fases = agruparPorFase(data.jogos);
+        const faseGrupos = fases.find(f => f.chave === 'GROUP_STAGE');
+        const fasesMataMata = fases.filter(f => f.chave !== 'GROUP_STAGE');
+
+        let html = '';
+
+        if (faseGrupos) {
+            html += `
+                <div class="status-bar">
+                    <span class="section-title">Fase de Grupos</span>
+                </div>
+            `;
+            html += faseGrupos.jogos.map(renderJogoBolao).join('');
+        }
+
+        if (fasesMataMata.length > 0) {
+            html += `
+                <div class="status-bar" style="margin-top:${faseGrupos ? '1.75rem' : '0'}">
+                    <span class="section-title">Mata-Mata 🏆</span>
+                </div>
+                <p class="bracket-hint">Arraste para o lado pra ver todas as fases →</p>
+                <div class="bracket-wrap">
+                    ${fasesMataMata.map(renderColunaFase).join('')}
+                </div>
+            `;
+        }
 
         const resumo = `
             <div class="stats-grid">
@@ -77,7 +114,9 @@ export async function loadBolao() {
                     <strong>10 pontos</strong>. Acerte só o resultado (vitória, empate
                     ou derrota do Brasil) e ganhe <strong>5 pontos</strong>. Errar tudo
                     não pontua. Palpites podem ser enviados ou editados até o
-                    início de cada jogo.
+                    início de cada jogo. No mata-mata, cada fase aparece como uma
+                    coluna do chaveamento — o adversário só pode ser palpitado
+                    depois que o confronto anterior define quem avança.
                 </p>
             </div>
         `;
@@ -97,6 +136,61 @@ export async function loadBolao() {
             </div>
         `;
     }
+}
+
+/**
+ * Agrupa os jogos por fase (grupo único + uma coluna por fase do mata-mata),
+ * já na ordem correta de progressão do chaveamento.
+ */
+function agruparPorFase(jogos) {
+    const grupos = new Map();
+
+    jogos.forEach(jogo => {
+        const chave = jogo.stage || (jogo.groupName ? 'GROUP_STAGE' : 'OUTROS');
+        if (!grupos.has(chave)) grupos.set(chave, []);
+        grupos.get(chave).push(jogo);
+    });
+
+    const chaves = [...grupos.keys()].sort((a, b) => {
+        const ia = ORDEM_FASES.indexOf(a);
+        const ib = ORDEM_FASES.indexOf(b);
+        if (ia === -1 && ib === -1) return 0;
+        if (ia === -1) return 1;
+        if (ib === -1) return -1;
+        return ia - ib;
+    });
+
+    return chaves.map(chave => ({ chave, jogos: grupos.get(chave) }));
+}
+
+function renderColunaFase(fase) {
+    return `
+        <div class="bracket-round">
+            <div class="bracket-round-title">${stageLabel(fase.chave)}</div>
+            ${fase.jogos.map(renderJogoDoMataMata).join('')}
+        </div>
+    `;
+}
+
+function renderJogoDoMataMata(jogo) {
+    const homeDefinido = Boolean(jogo.homeTeamId);
+    const awayDefinido = Boolean(jogo.awayTeamId);
+
+    if (!homeDefinido || !awayDefinido) {
+        return `
+            <div class="bracket-match-tbd">
+                <div class="game-date">${formatDate(jogo.utcDate)}</div>
+                <div class="bracket-tbd-text">
+                    ${homeDefinido ? translateTeamName(jogo.homeTeamName) : 'A definir'}
+                    <span class="palpite-x">×</span>
+                    ${awayDefinido ? translateTeamName(jogo.awayTeamName) : 'A definir'}
+                </div>
+                <div class="bracket-tbd-note">Confronto ainda não definido</div>
+            </div>
+        `;
+    }
+
+    return renderJogoBolao(jogo);
 }
 
 function renderLoginPrompt() {
@@ -137,6 +231,22 @@ function renderJogoBolao(jogo) {
         ? `<span class="score">${jogo.homeScore ?? '?'} <span class="score-sep">×</span> ${jogo.awayScore ?? '?'}</span>`
         : '';
 
+    const temPenaltis = jogo.penaltiesHome !== null && jogo.penaltiesHome !== undefined;
+    const penaltisTag = temPenaltis
+        ? `<span class="bracket-penaltis">pênaltis ${jogo.penaltiesHome}-${jogo.penaltiesAway}</span>`
+        : '';
+
+    let avancaTag = '';
+    if (finalizado && !jogo.groupName && jogo.winnerTeamId) {
+        const brasilAvancou = jogo.winnerTeamId === BRASIL_TEAM_ID;
+        avancaTag = `
+            <div class="bracket-result ${brasilAvancou ? 'avanca' : 'eliminado'}">
+                ${brasilAvancou ? '✅ Brasil avança' : '❌ Brasil eliminado'}
+                ${penaltisTag}
+            </div>
+        `;
+    }
+
     let inputsArea;
 
     if (bloqueado) {
@@ -168,7 +278,7 @@ function renderJogoBolao(jogo) {
     return `
         <div class="game-card">
             <div class="game-meta">
-                <span class="game-phase">Grupo ${jogo.groupName?.replace('GROUP_', '') || ''}</span>
+                <span class="game-phase">${stageLabel(jogo.stage, jogo.groupName)}</span>
                 <span class="game-date">${formatDate(jogo.utcDate)}</span>
             </div>
             <div class="game-teams">
@@ -187,6 +297,7 @@ function renderJogoBolao(jogo) {
             <div class="palpite-area">
                 ${inputsArea}
             </div>
+            ${avancaTag}
         </div>
     `;
 }
